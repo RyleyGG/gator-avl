@@ -3,9 +3,14 @@
 
 class GatorAVL {
     private:
+        /* class attributes */
         GatorNode* rootNode;
+
+        /* helper functions */
+        void balanceTree();
     public:
-        /* main commands */
+        /* main methods for executing input commands */
+        GatorAVL();
         void insertNode(std::string name, int id);
         void removeNode(int id);
         void searchNode(int id);
@@ -15,7 +20,4 @@ class GatorAVL {
         void postorderPrint();
         void levelCntPrint();
         void inorderRemove(int num);
-
-        /* helper functions */
-        void balanceTree();
 };
