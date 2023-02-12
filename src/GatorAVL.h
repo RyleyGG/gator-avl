@@ -6,12 +6,18 @@ class GatorAVL {
         /* class attributes */
         GatorNode* rootNode;
 
-        /* helper functions */
+        /* balance functions */
         void balanceTree();
+        void subtreeHeight(GatorNode* rootNode);
+        int balanceDiff(GatorNode* leftNode, GatorNode* rightNode);
+        void leftRot();
+        void rightRot();
+        void leftRightRot();
+        void rightLeftRot();
     public:
         /* main methods for executing input commands */
         GatorAVL();
-        void insertNode(std::string name, int id);
+        bool insertNode(std::string name, int id);
         void removeNode(int id);
         void searchNode(int id);
         void searchNode(std::string name);
