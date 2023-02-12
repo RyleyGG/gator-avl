@@ -43,8 +43,16 @@ int GatorNode::getId() {
     return this->id;
 }
 
+void GatorNode::setId(int id) {
+    this->id = id;
+}
+
 string GatorNode::getName() {
     return this->name;
+}
+
+void GatorNode::setName(string name) {
+    this->name = name;
 }
 
 GatorNode* GatorNode::getLeftChild() {

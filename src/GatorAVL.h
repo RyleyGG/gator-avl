@@ -14,11 +14,12 @@ class GatorAVL {
 
         /* helper functions */
         int getLevelCount(GatorNode *curNode, int level);
+        GatorNode* findSuccessor(GatorNode *curNode);
     public:
         /* main methods for executing input commands */
         GatorAVL();
         void insertNode(std::string name, int id);
-        void removeNode(int id);
+        GatorNode* removeNode(GatorNode* curNode, int id, bool& removeSuccess);
         void searchNode(int id);
         void searchNode(GatorNode* curNode, std::string name, int& matches);
         void inorderPrint(GatorNode* rootNode, std::string& outputStr);
@@ -28,5 +29,6 @@ class GatorAVL {
         void inorderRemove(int num);
 
         /* helper functions */
+        void setRootNode(GatorNode* node);
         GatorNode* getRootNode();
 };

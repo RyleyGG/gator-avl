@@ -14,7 +14,9 @@ class GatorNode {
 
         /* helper functions */
         int getId();
+        void setId(int id);
         std::string getName();
+        void setName(std::string name);
         int getBalanceFactor();
         void setBalanceFactor(int bf);
         GatorNode* getLeftChild();

@@ -5,6 +5,8 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     GatorAVL avlTree = GatorAVL();
+    GatorNode* rootNode = nullptr;
+    avlTree.setRootNode(rootNode);
 
     cout << "Enter number of commands you will execute: ";
     int commandCnt;
@@ -54,7 +56,14 @@ int main(int argc, char *argv[]) {
                 continue;
             }
 
-            avlTree.removeNode(id);
+            bool removeSuccess = false;
+            avlTree.removeNode(avlTree.getRootNode(), id, removeSuccess);
+            if (removeSuccess) {
+                cout << "successful" << endl;
+            }
+            else {
+                cout << "unsuccessful" << endl;
+            }
         }
         else if (firstWord == "search") {
             string searcher;

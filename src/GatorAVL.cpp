@@ -139,8 +139,45 @@ void GatorAVL::rebalanceTree(GatorNode* rootNode) {
     }
 }
 
-void GatorAVL::removeNode(int id) {
-    cout << "Remove called" << endl;
+GatorNode* GatorAVL::removeNode(GatorNode* curNode, int id,  bool& removeSuccess) {
+    if (curNode == nullptr) return curNode;
+    else if (id < curNode->getId()) curNode->setLeftChild(this->removeNode(curNode->getLeftChild(), id, removeSuccess));
+    else if (id > curNode->getId()) curNode->setRightChild(this->removeNode(curNode->getRightChild(), id, removeSuccess));
+    else {
+        removeSuccess = true;
+        if (curNode->getLeftChild() == nullptr && curNode->getRightChild() == nullptr) { /* Node has no children*/
+            delete curNode;
+            curNode = nullptr;
+        }
+        else if (curNode->getLeftChild() == nullptr) { /* Node only has one child */
+            GatorNode* temp = curNode;
+            curNode = curNode->getRightChild();
+            delete temp;
+        }
+        else if (curNode->getRightChild() == nullptr) { /* Node only has one child */
+            GatorNode* temp = curNode;
+            curNode = curNode->getLeftChild();
+            delete temp;
+        }
+        else { /* Node has both children */
+            GatorNode* temp = this->findSuccessor(curNode->getRightChild());
+            curNode->setId(temp->getId());
+            curNode->setName(temp->getName());
+            curNode->setRightChild(this->removeNode(curNode->getRightChild(), temp->getId(), removeSuccess));
+        }
+
+    }
+
+    // this->recalcBalanceFactors(curNode);
+    return curNode;
+}
+
+GatorNode* GatorAVL::findSuccessor(GatorNode* curNode) {
+    GatorNode* curTemp = curNode;
+    while (curTemp->getLeftChild()) {
+        curTemp = curTemp->getLeftChild();
+    }
+    return curTemp;
 }
 
 void GatorAVL::searchNode(GatorNode* curNode, string name, int& matches) {
@@ -277,6 +314,10 @@ int GatorAVL::getLevelCount(GatorNode *curNode, int level) {
     int rightLevel = getLevelCount(curNode->getRightChild(), level + 1);
 
     return max(leftLevel, rightLevel);
+}
+
+void GatorAVL::setRootNode(GatorNode *node) {
+    this->rootNode = node;
 }
 
 GatorNode* GatorAVL::getRootNode() {
