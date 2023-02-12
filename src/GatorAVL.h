@@ -20,10 +20,10 @@ class GatorAVL {
         void insertNode(std::string name, int id);
         void removeNode(int id);
         void searchNode(int id);
-        void searchNode(std::string name);
-        void inorderPrint(GatorNode* rootNode);
-        void preorderPrint(GatorNode* rootNode);
-        void postorderPrint(GatorNode* rootNode);
+        void searchNode(GatorNode* curNode, std::string name, int& matches);
+        void inorderPrint(GatorNode* rootNode, std::string& outputStr);
+        void preorderPrint(GatorNode* rootNode, std::string& outputStr);
+        void postorderPrint(GatorNode* rootNode, std::string& outputStr);
         void levelCntPrint();
         void inorderRemove(int num);
 

@@ -5,7 +5,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     GatorAVL avlTree = GatorAVL();
-    
+
     cout << "Enter number of commands you will execute: ";
     int commandCnt;
     cin >> commandCnt;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
         }
         else if (firstWord == "search") {
             string searcher;
-            searcher = cmd.substr(spacePos, cmd.length());
+            searcher = cmd.substr(spacePos + 1, cmd.length());
 
             string::const_iterator it = searcher.begin();
             while (it != searcher.end() && isdigit(*it)) ++it;
@@ -69,17 +69,31 @@ int main(int argc, char *argv[]) {
             }
             else {
                 searcher = searcher.substr(1, searcher.length() - 2);
-                avlTree.searchNode(searcher);
+                int matches = 0;
+                avlTree.searchNode(avlTree.getRootNode(), searcher, matches);
+
+                if (matches == 0) {
+                    cout << "unsuccessful" << endl;
+                }
             }
         }
         else if (firstWord == "printInorder") {
-            avlTree.inorderPrint(avlTree.getRootNode());
+            string outputStr = "";
+            avlTree.inorderPrint(avlTree.getRootNode(), outputStr);
+            outputStr = outputStr.substr(0, outputStr.length() - 2);
+            cout << outputStr << endl;
         }
         else if (firstWord == "printPreorder") {
-            avlTree.preorderPrint(avlTree.getRootNode());
+            string outputStr = "";
+            avlTree.preorderPrint(avlTree.getRootNode(), outputStr);
+            outputStr = outputStr.substr(0, outputStr.length() - 2);
+            cout << outputStr << endl;
         }
         else if (firstWord == "printPostorder") {
-            avlTree.postorderPrint(avlTree.getRootNode());
+            string outputStr = "";
+            avlTree.postorderPrint(avlTree.getRootNode(), outputStr);
+            outputStr = outputStr.substr(0, outputStr.length() - 2);
+            cout << outputStr << endl;
         }
         else if (cmd == "printLevelCount") {
             avlTree.levelCntPrint();
