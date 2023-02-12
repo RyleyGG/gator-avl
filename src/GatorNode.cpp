@@ -4,6 +4,7 @@ using namespace std;
 
 GatorNode::GatorNode() {
     this->id = 0;
+    this->balanceFactor = 0;
     this->name = "";
     this->parent = nullptr;
     this->leftChild = nullptr;
@@ -28,6 +29,14 @@ void GatorNode::setLeftChild(GatorNode* child) {
 
 void GatorNode::setRightChild(GatorNode* child) {
     this->rightChild = child;
+}
+
+int GatorNode::getBalanceFactor() {
+    return this->balanceFactor;
+}
+
+void GatorNode::setBalanceFactor(int bf) {
+    this->balanceFactor = bf;
 }
 
 int GatorNode::getId() {

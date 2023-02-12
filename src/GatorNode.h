@@ -6,6 +6,7 @@ class GatorNode {
         GatorNode* leftChild;
         GatorNode* rightChild;
         int id;
+        int balanceFactor;
         std::string name;
     public:
         GatorNode();
@@ -14,6 +15,8 @@ class GatorNode {
         /* helper functions */
         int getId();
         std::string getName();
+        int getBalanceFactor();
+        void setBalanceFactor(int bf);
         GatorNode* getLeftChild();
         GatorNode* getRightChild();
         GatorNode* getParent();

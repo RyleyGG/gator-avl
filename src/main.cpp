@@ -5,7 +5,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     GatorAVL avlTree = GatorAVL();
-
+    
     cout << "Enter number of commands you will execute: ";
     int commandCnt;
     cin >> commandCnt;

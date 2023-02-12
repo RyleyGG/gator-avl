@@ -7,17 +7,17 @@ class GatorAVL {
         GatorNode* rootNode;
 
         /* balance functions */
-        void balanceTree();
-        void subtreeHeight(GatorNode* rootNode);
-        int balanceDiff(GatorNode* leftNode, GatorNode* rightNode);
-        void leftRot();
-        void rightRot();
-        void leftRightRot();
-        void rightLeftRot();
+        void recalcBalanceFactors(GatorNode* curNode);
+        void rebalanceTree(GatorNode* rootNode);
+        void leftRot(GatorNode* node);
+        void rightRot(GatorNode* node);
+
+        /* helper functions */
+        int getLevelCount(GatorNode *curNode, int level);
     public:
         /* main methods for executing input commands */
         GatorAVL();
-        bool insertNode(std::string name, int id);
+        void insertNode(std::string name, int id);
         void removeNode(int id);
         void searchNode(int id);
         void searchNode(std::string name);
