@@ -73,13 +73,13 @@ int main(int argc, char *argv[]) {
             }
         }
         else if (firstWord == "printInorder") {
-            avlTree.inorderPrint();
+            avlTree.inorderPrint(avlTree.getRootNode());
         }
         else if (firstWord == "printPreorder") {
-            avlTree.preorderPrint();
+            avlTree.preorderPrint(avlTree.getRootNode());
         }
         else if (firstWord == "printPostorder") {
-            avlTree.postorderPrint();
+            avlTree.postorderPrint(avlTree.getRootNode());
         }
         else if (cmd == "printLevelCount") {
             avlTree.levelCntPrint();

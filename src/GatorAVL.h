@@ -21,9 +21,12 @@ class GatorAVL {
         void removeNode(int id);
         void searchNode(int id);
         void searchNode(std::string name);
-        void inorderPrint();
-        void preorderPrint();
-        void postorderPrint();
+        void inorderPrint(GatorNode* rootNode);
+        void preorderPrint(GatorNode* rootNode);
+        void postorderPrint(GatorNode* rootNode);
         void levelCntPrint();
         void inorderRemove(int num);
+
+        /* helper functions */
+        GatorNode* getRootNode();
 };

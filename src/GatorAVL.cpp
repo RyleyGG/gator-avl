@@ -97,16 +97,28 @@ void GatorAVL::searchNode(int id) {
     cout << "Search by id called" << endl;
 }
 
-void GatorAVL::inorderPrint() {
-    cout << "Inorder Print called" << endl;
+void GatorAVL::inorderPrint(GatorNode* rootNode) {
+    if (rootNode == nullptr) return;
+    
+    preorderPrint(rootNode->getLeftChild());
+    cout << "Name: " << rootNode->getName() << ", Id: " << rootNode->getId() << endl;
+    preorderPrint(rootNode->getRightChild());
 }
 
-void GatorAVL::preorderPrint() {
-    cout << "Preorder Print called" << endl;
+void GatorAVL::preorderPrint(GatorNode* rootNode) {
+    if (rootNode == nullptr) return;
+    
+    cout << "Name: " << rootNode->getName() << ", Id: " << rootNode->getId() << endl;
+    preorderPrint(rootNode->getLeftChild());
+    preorderPrint(rootNode->getRightChild());
 }
 
-void GatorAVL::postorderPrint() {
-    cout << "Postorder Print called" << endl;
+void GatorAVL::postorderPrint(GatorNode* rootNode) {
+    if (rootNode == nullptr) return;
+    
+    preorderPrint(rootNode->getLeftChild());
+    preorderPrint(rootNode->getRightChild());
+    cout << "Name: " << rootNode->getName() << ", Id: " << rootNode->getId() << endl;
 }
 
 void GatorAVL::levelCntPrint() {
@@ -115,4 +127,8 @@ void GatorAVL::levelCntPrint() {
 
 void GatorAVL::inorderRemove(int num) {
     cout << "Inorder Remove called" << endl;
+}
+
+GatorNode* GatorAVL::getRootNode() {
+    return this->rootNode;
 }
