@@ -109,6 +109,8 @@ int main(int argc, char *argv[]) {
         }
         else if (firstWord == "removeInorder") {
             int removeNum;
+            int traversals = -1;
+            bool removeSuccess = false;
             string removeStr;
 
             removeStr = cmd.substr(spacePos, cmd.length());
@@ -120,7 +122,13 @@ int main(int argc, char *argv[]) {
                 continue;
             }
 
-            avlTree.inorderRemove(removeNum);
+            avlTree.inorderRemove(avlTree.getRootNode(), removeNum, traversals, removeSuccess);
+            if (removeSuccess) {
+                cout << "successful" << endl;
+            }
+            else {
+                cout << "unsuccessful" << endl;
+            }
         }
         else {
             cout << "unsuccessful8" << endl;
