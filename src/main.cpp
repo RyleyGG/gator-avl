@@ -8,14 +8,12 @@ int main(int argc, char *argv[]) {
     GatorNode* rootNode = nullptr;
     avlTree.setRootNode(rootNode);
 
-    cout << "Enter number of commands you will execute: ";
     int commandCnt;
     cin >> commandCnt;
     cin.ignore(1000, '\n');
     
 
     for (int i = 0; i < commandCnt; i++) {
-        cout << "Enter command: ";
         string cmd, firstWord;
         getline(cin, cmd);
         size_t spacePos = cmd.find(' ');
@@ -24,20 +22,59 @@ int main(int argc, char *argv[]) {
         if (firstWord == "insert") {
             string name, idStr;
             int id;
-            name = cmd.substr(spacePos + 1, cmd.length() - 1);
+
+            /* Verifying integrity of name */
+            name = cmd.substr(spacePos + 1, cmd.length() - 1); /* includes whole command except for first word + first space */
             size_t nameEndPos = cmd.find("\" ");
-            if (nameEndPos == string::npos) {
-                cout << "unsuccessful5" << endl;
+            if (nameEndPos == string::npos) { /* if no quotes are found, exit */
+                cout << "unsuccessful" << endl;
                 continue;
             }
 
-            name = cmd.substr(spacePos + 2, nameEndPos - (spacePos + 2));
+            /* if number of quotes != 2, exit */
+            int quoteCnt = 0;
+            for (int i = 0; i < cmd.length(); i++) {
+                if (cmd[i] == '"') {
+                    quoteCnt++;
+                }
+            }
+            if (quoteCnt != 2) {
+                cout << "unsuccessful" << endl;
+                continue;
+            }
+
+            name = cmd.substr(spacePos + 2, nameEndPos - (spacePos + 2)); /* now includes solely the name, w/o quotes */
+            /* if there is a space at the beginning or end of the name, exit */
+            /* exclude cases where name is empty, as this should be accepted */
+            size_t spacePos = name.find(' ');
+            if ((spacePos == 0 || spacePos == name.length() - 1) && name.length() != 0) {
+                cout << "unsuccessful" << endl;
+                continue;
+            }
+
+            /* if name contains non-alpha or non-space character, exit */
+            bool badCharFound = false;
+            for (int i = 0; i < name.length(); i++) {
+                if (!isspace(name[i]) && !isalpha(name[i])) {
+                    badCharFound = true;
+                    break;
+                }
+            }
+            if (badCharFound) {
+                cout << "unsuccessful" << endl;
+                continue;
+            }
+
             idStr = cmd.substr(nameEndPos + 2), cmd.length();
+            if (idStr.length() != 8) {
+                cout << "unsuccessful" << endl;
+                continue;
+            }
             try {
                 id = stoi(idStr);
             }
             catch(const invalid_argument e) {
-                cout << "unsuccessful6" << endl;
+                cout << "unsuccessful" << endl;
                 continue;
             }
 
@@ -47,7 +84,11 @@ int main(int argc, char *argv[]) {
             int id;
             string idStr;
 
-            idStr = cmd.substr(spacePos, cmd.length());
+            idStr = cmd.substr(spacePos + 1, cmd.length());
+            if (idStr.length() != 8) {
+                cout << "unsuccessful" << endl;
+                continue;
+            }
             try {
                 id = stoi(idStr);
             }
@@ -73,6 +114,10 @@ int main(int argc, char *argv[]) {
             while (it != searcher.end() && isdigit(*it)) ++it;
             
             if (!searcher.empty() && it == searcher.end()) {
+                if (searcher.length() != 8) {
+                    cout << "unsuccessful" << endl;
+                    continue;
+                }
                 int searchInt = stoi(searcher);
                 avlTree.searchNode(searchInt);
             }
@@ -131,7 +176,7 @@ int main(int argc, char *argv[]) {
             }
         }
         else {
-            cout << "unsuccessful8" << endl;
+            cout << "unsuccessful" << endl;
         }
     }
 

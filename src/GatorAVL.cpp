@@ -9,31 +9,6 @@ GatorAVL::GatorAVL() {
 };
 
 void GatorAVL::insertNode(string name, int id) {
-    /* first, validate input */
-    size_t spacePos = name.find(' ');
-    if (spacePos == 0 || spacePos == name.length() - 1) {
-        cout << "unsuccessful1" << endl;
-        return;
-    }
-    for (int i = 0; i < name.length(); i++) {
-        if (i != spacePos && !isalpha(name[i])) {
-            cout << "unsuccessful2" << endl;
-            return;
-        }
-    }
-
-    int digitCnt = 0;
-    int idIter = id;
-    while (idIter != 0) {
-        idIter = idIter / 10;
-        digitCnt++;
-    }
-    if (digitCnt != 8) {
-        cout << "unsuccessful3" << endl;
-        return;
-    }
-
-    /* secondly, insert node into tree */
     GatorNode *newNode = new GatorNode(name, id);
     
     if (this->rootNode) {
@@ -55,7 +30,7 @@ void GatorAVL::insertNode(string name, int id) {
                     curNode = curNode->getLeftChild();
                 }
             }
-            else {
+            else if (newNode->getId() > curNode->getId()) {
                 if (curNode->getRightChild() == nullptr) {
                     curNode->setRightChild(newNode);
                     newNode->setParent(curNode);
@@ -66,6 +41,10 @@ void GatorAVL::insertNode(string name, int id) {
                     curNode = curNode->getRightChild();
                 }
             }
+            else {
+                nodeStatus = "duplicate";
+                break;
+            }
         }
 
 
@@ -73,13 +52,13 @@ void GatorAVL::insertNode(string name, int id) {
             When a node is inserted, balance factors for all nodes are recalculated, starting with the newly added node.
             The recalc function will recursively 1) rebalance is BF out of bounds and then 2) set BF's for all parents ascending up the tree
         */
-        if (nodeStatus != "") {
+        if (nodeStatus == "left" || nodeStatus == "right") {
             this->recalcBalanceFactors(newNode);
             cout << "successful" << endl;
             return;
         }
         else {
-            cout << "unsuccessful4" << endl;
+            cout << "unsuccessful" << endl;
             return;
         }
     }
@@ -117,23 +96,19 @@ void GatorAVL::recalcBalanceFactors(GatorNode* curNode) {
 void GatorAVL::rebalanceTree(GatorNode* rootNode) {
     if (rootNode->getBalanceFactor() > 0) {
         if (rootNode->getRightChild()->getBalanceFactor() < 0) {
-            cout << "RL called" << endl;
             this->rightRot(rootNode->getRightChild());
             this->leftRot(rootNode);
         }
         else {
-            cout << "L called" << endl;
             this->leftRot(rootNode);
         }
     }
     else if (rootNode->getBalanceFactor() < 0) {
         if (rootNode->getLeftChild()->getBalanceFactor() > 0) {
-            cout << "LR called" << endl;
             this->leftRot(rootNode->getLeftChild());
             this->rightRot(rootNode);
         }
         else {
-            cout << "R called" << endl;
             this->rightRot(rootNode);
         }
     }
