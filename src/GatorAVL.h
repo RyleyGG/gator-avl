@@ -14,6 +14,7 @@ class GatorAVL {
 
         /* helper functions */
         int getLevelCount(GatorNode *curNode, int level);
+        int calcBalanceFactor(GatorNode *curNode, int level);
         GatorNode* findSuccessor(GatorNode *curNode);
     public:
         /* main methods for executing input commands */

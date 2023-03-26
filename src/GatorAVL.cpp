@@ -115,32 +115,36 @@ void GatorAVL::rebalanceTree(GatorNode* rootNode) {
 }
 
 GatorNode* GatorAVL::removeNode(GatorNode* curNode, int id,  bool& removeSuccess) {
-    if (curNode == nullptr) return curNode;
+    if (!curNode) return curNode;
     else if (id < curNode->getId()) curNode->setLeftChild(this->removeNode(curNode->getLeftChild(), id, removeSuccess));
     else if (id > curNode->getId()) curNode->setRightChild(this->removeNode(curNode->getRightChild(), id, removeSuccess));
     else {
         removeSuccess = true;
         if (curNode->getLeftChild() == nullptr && curNode->getRightChild() == nullptr) { /* Node has no children */
             if (curNode->getParent()) {
-                if (curNode->getParent()->getLeftChild()->getId() == curNode->getId()) {
-                    curNode->getParent()->setLeftChild(nullptr);
+                if (curNode->getParent()->getLeftChild()) {
+                    if (curNode->getParent()->getLeftChild()->getId() == curNode->getId()) {
+                        curNode->getParent()->setLeftChild(nullptr);
+                        return nullptr;
+                    }
                 }
-                else if (curNode->getParent()->getRightChild()->getId() == curNode->getId()) {
-                    curNode->getParent()->setRightChild(nullptr);
+                if (curNode->getParent()->getRightChild()) {
+                    if (curNode->getParent()->getRightChild()->getId() == curNode->getId()) {
+                        curNode->getParent()->setRightChild(nullptr);
+                        return nullptr;
+                    }
                 }
             }
-            delete curNode;
-            curNode = nullptr;
         }
         else if (curNode->getLeftChild() == nullptr) { /* Node only has one child */
             GatorNode* temp = curNode;
             curNode = curNode->getRightChild();
-            delete temp;
+            curNode->setParent(temp->getParent());
         }
         else if (curNode->getRightChild() == nullptr) { /* Node only has one child */
             GatorNode* temp = curNode;
             curNode = curNode->getLeftChild();
-            delete temp;
+            curNode->setParent(temp->getParent());
         }
         else { /* Node has both children */
             GatorNode* temp = this->findSuccessor(curNode->getRightChild());
@@ -194,8 +198,8 @@ void GatorAVL::searchNode(int id) {
 GatorNode* GatorAVL::inorderRemove(GatorNode* curNode, int& num, int& traversals, bool& removeSuccess) {
     if (curNode == nullptr) return curNode;
     
-    traversals++;
     this->inorderRemove(curNode->getLeftChild(), num, traversals, removeSuccess);
+    traversals++;
     if (traversals == num) {
         removeSuccess = true;
         if (curNode->getLeftChild() == nullptr && curNode->getRightChild() == nullptr) { /* Node has no children */
@@ -207,20 +211,16 @@ GatorNode* GatorAVL::inorderRemove(GatorNode* curNode, int& num, int& traversals
                     curNode->getParent()->setRightChild(nullptr);
                 }
             }
-            delete curNode;
-            curNode = nullptr;
         }
         else if (curNode->getLeftChild() == nullptr) { /* Node only has one child */
             GatorNode* temp = curNode;
             curNode = curNode->getRightChild();
             curNode->setParent(temp->getParent());
-            delete temp;
         }
         else if (curNode->getRightChild() == nullptr) { /* Node only has one child */
             GatorNode* temp = curNode;
             curNode = curNode->getLeftChild();
             curNode->setParent(temp->getParent());
-            delete temp;
         }
         else { /* Node has both children */
             GatorNode* temp = this->findSuccessor(curNode->getRightChild());
@@ -230,9 +230,7 @@ GatorNode* GatorAVL::inorderRemove(GatorNode* curNode, int& num, int& traversals
             curNode->getRightChild()->setParent(curNode);
         }
     }
-    else {
-        this->inorderRemove(curNode->getRightChild(), num, traversals, removeSuccess);
-    }
+    this->inorderRemove(curNode->getRightChild(), num, traversals, removeSuccess);
 
     return curNode;
 }
@@ -299,8 +297,8 @@ void GatorAVL::leftRot(GatorNode* node) {
     newNode->setLeftChild(node);
     node->setParent(newNode);
 
-    node->setBalanceFactor(node->getBalanceFactor() - 1 - max(0, newNode->getBalanceFactor()));
-    newNode->setBalanceFactor(newNode->getBalanceFactor() - 1 + min(0, node->getBalanceFactor()));
+    node->setBalanceFactor(calcBalanceFactor(node, 0));
+    newNode->setBalanceFactor(calcBalanceFactor(newNode, 0));
 }
 
 void GatorAVL::rightRot(GatorNode *node) {
@@ -325,8 +323,8 @@ void GatorAVL::rightRot(GatorNode *node) {
     newNode->setRightChild(node);
     node->setParent(newNode);
 
-    node->setBalanceFactor(node->getBalanceFactor() - 1 - max(0, newNode->getBalanceFactor()));
-    newNode->setBalanceFactor(newNode->getBalanceFactor() - 1 + min(0, node->getBalanceFactor()));
+    node->setBalanceFactor(calcBalanceFactor(node, 0));
+    newNode->setBalanceFactor(calcBalanceFactor(newNode, 0));
 }
 
 
@@ -338,6 +336,15 @@ int GatorAVL::getLevelCount(GatorNode *curNode, int level) {
     int rightLevel = getLevelCount(curNode->getRightChild(), level + 1);
 
     return max(leftLevel, rightLevel);
+}
+
+int GatorAVL::calcBalanceFactor(GatorNode *curNode, int level) {
+    if (!curNode) return level - 1;
+
+    int leftLevel = getLevelCount(curNode->getLeftChild(), level + 1);
+    int rightLevel = getLevelCount(curNode->getRightChild(), level + 1);
+
+    return rightLevel - leftLevel;
 }
 
 void GatorAVL::setRootNode(GatorNode *node) {
